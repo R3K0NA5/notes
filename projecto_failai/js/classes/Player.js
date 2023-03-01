@@ -128,7 +128,7 @@ class Player extends Sprite {
         this.updateHitbox()
 
         this.updateCamerabox()
-        /*c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        c.fillStyle = 'rgba(0, 0, 255, 0.2)'
         c.fillRect(
           this.camerabox.position.x,
           this.camerabox.position.y,
@@ -144,7 +144,7 @@ class Player extends Sprite {
           this.hitbox.position.y,
           this.hitbox.width,
           this.hitbox.height
-        )*/
+        )
 
         this.draw()
 

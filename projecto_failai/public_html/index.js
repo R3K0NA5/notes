@@ -1,19 +1,15 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-
 canvas.width = 1000
 canvas.height = 1000
-
 const scaledCanvas = {
     width: canvas.width / 1,
     height: canvas.height / 1,
 }
-
 const floorCollisions2D = []
 for (let i = 0; i < floorCollisions.length; i += 800) {
     floorCollisions2D.push(floorCollisions.slice(i, i + 800))
 }
-
 const collisionBlocks = []
 floorCollisions2D.forEach((row, y) => {
     row.forEach((symbol, x) => {
@@ -29,12 +25,10 @@ floorCollisions2D.forEach((row, y) => {
         }
     })
 })
-
 const platformCollisions2D = []
 for (let i = 0; i < platformCollisions.length; i += 800) {
     platformCollisions2D.push(platformCollisions.slice(i, i + 800))
 }
-
 const platformCollisionBlocks = []
 platformCollisions2D.forEach((row, y) => {
     row.forEach((symbol, x) => {
@@ -51,37 +45,35 @@ platformCollisions2D.forEach((row, y) => {
         }
     })
 })
-
-
 class Projectile {
     constructor({ position, velocity }) {
-        this.position = position
-        this.velocity = velocity // fixed typo here
-        this.radius = 3
+        this.position = position;
+        this.velocity = velocity;
+        this.radius = 3;
     }
 
     draw() {
-        c.beginPath()
-        c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
-        c.fill()
-        c.closePath()
+        c.beginPath();
+        c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+        c.fill();
+        c.closePath();
     }
 
     update() {
-        this.draw()
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
+        this.draw();
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+    }
+
+    isCollidingWith(enemy) {
+        const dx = this.position.x - enemy.position.x;
+        const dy = this.position.y - enemy.position.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        return distance < this.radius + enemy.width / 2;
     }
 }
-
-const projectiles = [
-]
-
-
-
-
+const projectiles = []
 const gravity = 0.1
-
 const player = new Player({
     position: {
         x: 100,
@@ -187,6 +179,58 @@ const enemy = new Enemy({
         },
     },
 })
+const enemy2 = new Enemy({
+    position: {
+        x: 900,
+        y: 700,
+    },
+    collisionBlocks,
+    platformCollisionBlocks,
+    imageSrc: '../img/soldier/idle.png',
+    frameRate: 8,
+    animations: {
+        Idle: {
+            imageSrc: '../img/soldier/idle.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        Run: {
+            imageSrc: '../img/soldier/begimas.png',
+            frameRate: 8,
+            frameBuffer: 12,
+        },
+        Jump: {
+            imageSrc: '../img/soldier/begimas.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        Fall: {
+            imageSrc: '../img/soldier/falling.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        FallLeft: {
+            imageSrc: '../img/soldier/fallingk.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        RunLeft: {
+            imageSrc: '../img/soldier/begimask.png',
+            frameRate: 8,
+            frameBuffer: 12,
+        },
+        IdleLeft: {
+            imageSrc: '../img/soldier/idlek.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        JumpLeft: {
+            imageSrc: '../img/soldier/jumpk.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+    },
+})
 
 const keys = {
     d: {
@@ -196,7 +240,6 @@ const keys = {
         pressed: false,
     },
 }
-
 const background = new Sprite({
     position: {
         x: 0,
@@ -204,9 +247,7 @@ const background = new Sprite({
     },
     imageSrc: '../img/background.png',
 })
-
 const backgroundImageHeight = 1000
-
 const camera = {
     position: {
         x: 0,
@@ -214,6 +255,7 @@ const camera = {
     },
 }
 
+const enemies = [enemy, enemy2];
 function animate() {
     window.requestAnimationFrame(animate)
     c.fillStyle = 'white'
@@ -230,20 +272,33 @@ function animate() {
     platformCollisionBlocks.forEach((block) => {
         block.update()
     })
-    enemy.checkForHorizontalCanvasCollision()
-    enemy.update()
+
+    // Check for collisions between projectiles and enemies
+    for (let i = 0; i < projectiles.length; i++) {
+        for (let j = 0; j < enemies.length; j++) {
+            if (projectiles[i].isCollidingWith(enemies[j])) {
+                // Remove the enemy from the enemies array
+                enemies.splice(j, 1);
+                // Remove the projectile from the projectiles array
+                projectiles.splice(i, 1);
+                // Exit the loop since a projectile can only hit one enemy
+                break;
+            }
+        }
+    }
+
+    // Update the remaining enemies
+    enemies.forEach((enemy) => {
+        enemy.checkForHorizontalCanvasCollision()
+        enemy.update()
+    })
+
+    // Update the player and projectiles
     player.checkForHorizontalCanvasCollision()
     player.update()
-    projectiles.forEach((projectile, index)=>{
-        if (projectile.position.y + projectile.radius <=0){
-            setTimeout(() => {
-                projectiles.splice(index,1)
-            },0)
-        } else {
-            projectile.update()
-        }
-
-    })
+    projectiles.forEach((projectile) => {
+        projectile.update();
+    });
 
     player.velocity.x = 0
     if (keys.d.pressed) {
@@ -273,9 +328,7 @@ function animate() {
 
     c.restore()
 }
-
 animate()
-
 window.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'd':
@@ -290,9 +343,9 @@ window.addEventListener('keydown', (event) => {
         case ' ':
             console.log('space')
             projectiles.push (new Projectile({
-            position: { x: player.position.x + player.width, y: player.position.y +50 },
-            velocity: { x:10, y: 0 },
-        }))
+                position: { x: player.position.x + player.width, y: player.position.y +50 },
+                velocity: { x:10, y: 0 },
+            }))
             break
     }
 })

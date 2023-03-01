@@ -128,7 +128,7 @@ class Enemy extends Sprite {
         this.updateHitbox()
 
         this.updateCamerabox()
-        /*c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        c.fillStyle = 'rgba(0, 0, 255, 0.2)'
         c.fillRect(
           this.camerabox.position.x,
           this.camerabox.position.y,
@@ -144,7 +144,7 @@ class Enemy extends Sprite {
           this.hitbox.position.y,
           this.hitbox.width,
           this.hitbox.height
-        )*/
+        )
 
         this.draw()
 
@@ -255,4 +255,34 @@ class Enemy extends Sprite {
         }
     }
 
+    destroy() {
+        // remove the enemy from the canvas
+        c.clearRect(this.position.x, this.position.y, this.width, this.height)
+        console.log('Enemy destroyed')
+    }
+    /*isCollidingWith(enemy) {
+        const dx = this.position.x - enemy.position.x;
+        const dy = this.position.y - enemy.position.y;
+        console.log('Projectile collided with enemy!');
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < this.radius + enemy.width / 2) {
+            // Remove the enemy
+            const index = enemies.indexOf(enemy);
+            if (index > -1) {
+                enemies.splice(index, 1);
+            }
+            return true;
+        }
+        return false;
+    }*/
+
+   /* isCollidingWith(enemy) {
+        const dx = this.position.x - enemy.position.x;
+        const dy = this.position.y - enemy.position.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        console.log("dx: ", dx);
+        console.log("dy: ", dy);
+        console.log("distance: ", distance);
+        return distance < this.radius + enemy.width / 2;
+    }*/
 }
