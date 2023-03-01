@@ -1,5 +1,5 @@
 
-class Player extends Sprite {
+class Enemy extends Sprite {
     constructor({
                     position,
                     collisionBlocks,

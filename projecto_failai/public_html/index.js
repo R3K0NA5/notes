@@ -52,11 +52,92 @@ platformCollisions2D.forEach((row, y) => {
     })
 })
 
+
+class Projectile {
+    constructor({ position, velocity }) {
+        this.position = position
+        this.velocity = velocity // fixed typo here
+        this.radius = 3
+    }
+
+    draw() {
+        c.beginPath()
+        c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+        c.fill()
+        c.closePath()
+    }
+
+    update() {
+        this.draw()
+        this.position.x += this.velocity.x
+        this.position.y += this.velocity.y
+    }
+}
+
+const projectiles = [
+]
+
+
+
+
 const gravity = 0.1
 
 const player = new Player({
     position: {
         x: 100,
+        y: 700,
+    },
+    collisionBlocks,
+    platformCollisionBlocks,
+    imageSrc: '../img/soldier/idle.png',
+    frameRate: 8,
+    animations: {
+        Idle: {
+            imageSrc: '../img/soldier/idle.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        Run: {
+            imageSrc: '../img/soldier/begimas.png',
+            frameRate: 8,
+            frameBuffer: 12,
+        },
+        Jump: {
+            imageSrc: '../img/soldier/begimas.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        Fall: {
+            imageSrc: '../img/soldier/falling.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        FallLeft: {
+            imageSrc: '../img/soldier/fallingk.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        RunLeft: {
+            imageSrc: '../img/soldier/begimask.png',
+            frameRate: 8,
+            frameBuffer: 12,
+        },
+        IdleLeft: {
+            imageSrc: '../img/soldier/idlek.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+        JumpLeft: {
+            imageSrc: '../img/soldier/jumpk.png',
+            frameRate: 8,
+            frameBuffer: 200,
+        },
+    },
+})
+
+const enemy = new Enemy({
+    position: {
+        x: 500,
         y: 700,
     },
     collisionBlocks,
@@ -142,16 +223,27 @@ function animate() {
     c.scale(1, 1)
     c.translate(camera.position.x, camera.position.y)
     background.update()
-     collisionBlocks.forEach((collisionBlock) => {
-       collisionBlock.update()
-     })
+    collisionBlocks.forEach((collisionBlock) => {
+        collisionBlock.update()
+    })
 
-     platformCollisionBlocks.forEach((block) => {
-       block.update()
-     })
-
+    platformCollisionBlocks.forEach((block) => {
+        block.update()
+    })
+    enemy.checkForHorizontalCanvasCollision()
+    enemy.update()
     player.checkForHorizontalCanvasCollision()
     player.update()
+    projectiles.forEach((projectile, index)=>{
+        if (projectile.position.y + projectile.radius <=0){
+            setTimeout(() => {
+                projectiles.splice(index,1)
+            },0)
+        } else {
+            projectile.update()
+        }
+
+    })
 
     player.velocity.x = 0
     if (keys.d.pressed) {
@@ -194,6 +286,13 @@ window.addEventListener('keydown', (event) => {
             break
         case 'w':
             player.velocity.y = -4
+            break
+        case ' ':
+            console.log('space')
+            projectiles.push (new Projectile({
+            position: { x: player.position.x + player.width, y: player.position.y +50 },
+            velocity: { x:10, y: 0 },
+        }))
             break
     }
 })
