@@ -256,6 +256,9 @@ const camera = {
 }
 
 const enemies = [enemy, enemy2];
+
+let score = 0;
+
 function animate() {
     window.requestAnimationFrame(animate)
     c.fillStyle = 'white'
@@ -277,6 +280,8 @@ function animate() {
     for (let i = 0; i < projectiles.length; i++) {
         for (let j = 0; j < enemies.length; j++) {
             if (projectiles[i].isCollidingWith(enemies[j])) {
+                // Increase the score by 100
+                score += 100;
                 // Remove the enemy from the enemies array
                 enemies.splice(j, 1);
                 // Remove the projectile from the projectiles array
@@ -326,6 +331,9 @@ function animate() {
         else player.switchSprite('FallLeft')
     }
 
+    c.fillStyle = 'white';
+    c.font = '20px Arial';
+    c.fillText(`Score: ${score}`, 10, 30);
     c.restore()
 }
 animate()
