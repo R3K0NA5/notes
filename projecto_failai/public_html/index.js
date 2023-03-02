@@ -55,6 +55,7 @@ class Projectile {
     draw() {
         c.beginPath();
         c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+        c.fillStyle = 'white'; // Change the color to red
         c.fill();
         c.closePath();
     }
@@ -66,10 +67,10 @@ class Projectile {
     }
 
     isCollidingWith(enemy) {
-        const dx = this.position.x - enemy.position.x;
-        const dy = this.position.y - enemy.position.y;
+        const dx = this.position.x - (enemy.hitbox.position.x + enemy.hitbox.width / 2);
+        const dy = this.position.y - (enemy.hitbox.position.y + enemy.hitbox.height / 2);
         const distance = Math.sqrt(dx * dx + dy * dy);
-        return distance < this.radius + enemy.width / 2;
+        return distance < this.radius + Math.max(enemy.hitbox.width, enemy.hitbox.height) / 3;
     }
 }
 const projectiles = []
@@ -136,48 +137,6 @@ const enemy = new Enemy({
     platformCollisionBlocks,
     imageSrc: '../img/soldier/idle.png',
     frameRate: 8,
-    animations: {
-        Idle: {
-            imageSrc: '../img/soldier/idle.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        Run: {
-            imageSrc: '../img/soldier/begimas.png',
-            frameRate: 8,
-            frameBuffer: 12,
-        },
-        Jump: {
-            imageSrc: '../img/soldier/begimas.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        Fall: {
-            imageSrc: '../img/soldier/falling.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        FallLeft: {
-            imageSrc: '../img/soldier/fallingk.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        RunLeft: {
-            imageSrc: '../img/soldier/begimask.png',
-            frameRate: 8,
-            frameBuffer: 12,
-        },
-        IdleLeft: {
-            imageSrc: '../img/soldier/idlek.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        JumpLeft: {
-            imageSrc: '../img/soldier/jumpk.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-    },
 })
 const enemy2 = new Enemy({
     position: {
@@ -188,48 +147,7 @@ const enemy2 = new Enemy({
     platformCollisionBlocks,
     imageSrc: '../img/soldier/idle.png',
     frameRate: 8,
-    animations: {
-        Idle: {
-            imageSrc: '../img/soldier/idle.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        Run: {
-            imageSrc: '../img/soldier/begimas.png',
-            frameRate: 8,
-            frameBuffer: 12,
-        },
-        Jump: {
-            imageSrc: '../img/soldier/begimas.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        Fall: {
-            imageSrc: '../img/soldier/falling.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        FallLeft: {
-            imageSrc: '../img/soldier/fallingk.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        RunLeft: {
-            imageSrc: '../img/soldier/begimask.png',
-            frameRate: 8,
-            frameBuffer: 12,
-        },
-        IdleLeft: {
-            imageSrc: '../img/soldier/idlek.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-        JumpLeft: {
-            imageSrc: '../img/soldier/jumpk.png',
-            frameRate: 8,
-            frameBuffer: 200,
-        },
-    },
+
 })
 
 const keys = {
@@ -296,6 +214,14 @@ function animate() {
     enemies.forEach((enemy) => {
         enemy.checkForHorizontalCanvasCollision()
         enemy.update()
+        // Draw the hitbox for the enemy
+        c.fillStyle = 'rgba(85,255,0,0.2)'
+        c.fillRect(
+            enemy.hitbox.position.x,
+            enemy.hitbox.position.y,
+            enemy.hitbox.width,
+            enemy.hitbox.height
+        )
     })
 
     // Update the player and projectiles
@@ -352,7 +278,7 @@ window.addEventListener('keydown', (event) => {
             console.log('space')
             projectiles.push (new Projectile({
                 position: { x: player.position.x + player.width, y: player.position.y +50 },
-                velocity: { x:10, y: 0 },
+                velocity: { x:1, y: 0 },
             }))
             break
     }
