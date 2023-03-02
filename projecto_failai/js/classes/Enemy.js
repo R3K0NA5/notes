@@ -128,7 +128,7 @@ class Enemy extends Sprite {
         this.updateHitbox()
 
         this.updateCamerabox()
-        c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        c.fillStyle = 'rgba(0, 0, 255, 0)'
         c.fillRect(
           this.camerabox.position.x,
           this.camerabox.position.y,
@@ -136,9 +136,9 @@ class Enemy extends Sprite {
           this.camerabox.height
         )
        //  draws out the image
-        c.fillStyle = 'rgba(0, 255, 0, 0.2)'
+        c.fillStyle = 'rgba(0, 255, 0, 0)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        c.fillStyle = 'rgba(255, 0, 0, 0.2)'
+        c.fillStyle = 'rgba(255, 0, 0, 0)'
         c.fillRect(
           this.hitbox.position.x,
           this.hitbox.position.y,

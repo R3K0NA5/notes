@@ -13,7 +13,7 @@ for (let i = 0; i < floorCollisions.length; i += 800) {
 const collisionBlocks = []
 floorCollisions2D.forEach((row, y) => {
     row.forEach((symbol, x) => {
-        if (symbol === 80001) {
+        if (symbol === 83539) {
             collisionBlocks.push(
                 new CollisionBlock({
                     position: {
@@ -32,7 +32,7 @@ for (let i = 0; i < platformCollisions.length; i += 800) {
 const platformCollisionBlocks = []
 platformCollisions2D.forEach((row, y) => {
     row.forEach((symbol, x) => {
-        if (symbol === 80002) {
+        if (symbol === 83539) {
             platformCollisionBlocks.push(
                 new CollisionBlock({
                     position: {
@@ -144,7 +144,7 @@ const player = new Player({
         },
     },
 })
-function createEnemy(x, y, imageSrc, frameRate) {
+function createEnemy(x, y, imageSrc, frameRate,frameBuffer) {
     return new Enemy({
         position: {
             x,
@@ -156,7 +156,7 @@ function createEnemy(x, y, imageSrc, frameRate) {
         frameRate,
     });
 }
-const enemy1 = createEnemy(300, 700, '../img/soldier/idle.png', 8);
+const enemy1 = createEnemy(300, 700, '../img/soldier/idle.png', 8,200);
 const enemy2 = createEnemy(600, 700, '../img/soldier/idle.png', 8);
 const enemy3 = createEnemy(900, 700, '../img/soldier/idle.png', 8);
 const enemy4 = createEnemy(1200, 700, '../img/soldier/idle.png', 8);
@@ -228,7 +228,7 @@ function animate() {
         enemy.checkForHorizontalCanvasCollision()
         enemy.update()
         // Draw the hitbox for the enemy
-        c.fillStyle = 'rgba(85,255,0,0.2)'
+        c.fillStyle = 'rgba(85,255,0,0)'
         c.fillRect(
             enemy.hitbox.position.x,
             enemy.hitbox.position.y,
