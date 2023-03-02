@@ -128,7 +128,8 @@ const player = new Player({
     },
 })
 
-const enemy = new Enemy({
+
+/*const enemy = new Enemy({
     position: {
         x: 500,
         y: 700,
@@ -148,7 +149,33 @@ const enemy2 = new Enemy({
     imageSrc: '../img/soldier/idle.png',
     frameRate: 8,
 
-})
+})*/
+
+function createEnemy(x, y, imageSrc, frameRate) {
+    return new Enemy({
+        position: {
+            x,
+            y,
+        },
+        collisionBlocks,
+        platformCollisionBlocks,
+        imageSrc,
+        frameRate,
+    });
+}
+const enemy1 = createEnemy(300, 700, '../img/soldier/idle.png', 8);
+const enemy2 = createEnemy(600, 700, '../img/soldier/idle.png', 8);
+const enemy3 = createEnemy(900, 700, '../img/soldier/idle.png', 8);
+const enemy4 = createEnemy(1200, 700, '../img/soldier/idle.png', 8);
+const enemy5 = createEnemy(1500, 700, '../img/soldier/idle.png', 8);
+const enemy6 = createEnemy(1800, 700, '../img/soldier/idle.png', 8);
+const enemy7 = createEnemy(2000, 700, '../img/soldier/idle.png', 8);
+const enemy8 = createEnemy(2500, 700, '../img/soldier/idle.png', 8);
+const enemy9 = createEnemy(3000, 700, '../img/soldier/idle.png', 8);
+const enemy10 = createEnemy(3400, 700, '../img/soldier/idle.png', 8);
+const enemy11 = createEnemy(3800, 700, '../img/soldier/idle.png', 8);
+const enemy12 = createEnemy(4200, 700, '../img/soldier/idle.png', 8);
+
 
 const keys = {
     d: {
@@ -172,8 +199,7 @@ const camera = {
         y: -backgroundImageHeight + scaledCanvas.height,
     },
 }
-
-const enemies = [enemy, enemy2];
+const enemies = [ enemy1, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enemy8, enemy9, enemy10, enemy11, enemy12 ];
 
 let score = 0;
 
